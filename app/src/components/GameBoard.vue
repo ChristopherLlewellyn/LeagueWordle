@@ -12,16 +12,18 @@
 
 <script>
 import { defineComponent, reactive, ref } from "vue";
-import { makeGuess, isWinningWord, getWordOfDay } from "src/game/wordle.js";
+import { useStore } from 'vuex'
+import { makeGuess, isWinningWord, getWordOfDay } from "src/lib/wordle.js";
 
 export default defineComponent({
   name: "GameBoard",
   setup () {
+    const store = useStore();
     const wordLength = 5;
     const numberOfRows = 6;
     let activeRow = 0;
     let activeTile = 0;
-    let inputDisabled = false;
+    let gameOver = false;
 
     // Create board 2D array
     const board = new Array(numberOfRows);
@@ -36,7 +38,7 @@ export default defineComponent({
     const reactiveBoard = reactive({board: board})
 
     function receiveKeypress(key) {
-      if (inputDisabled) return;
+      if (gameOver) return;
 
       if (key === "enter") {
         submitGuess();
@@ -52,12 +54,18 @@ export default defineComponent({
       inputLetter(key)
     }
 
-    function submitGuess() {
-      const guess = reactiveBoard.board[activeRow].join("");
-      if (guess.length !== 5) return;
+    function submitGuess(fromLoad = false) {
+      if (gameOver) return;
+
+      const guess = reactiveBoard.board[activeRow].join(""); // Get user's input
+        
+      if (guess.length !== wordLength) return;
 
       const result = makeGuess(guess);
-      console.log(result);
+
+      if (!fromLoad) {
+        store.commit("game/submitGuess", guess);
+      }
 
       if (!result.isValidWord) {
         // show "is not valid word" popup
@@ -76,21 +84,23 @@ export default defineComponent({
         }
       }
 
-      if (isWinningWord(guess)) {
-        // Game over
-        inputDisabled = true;
-        return;
-      }
-
       activeRow += 1;
       activeTile = 0;
+
+      if (isWinningWord(guess) || activeRow > numberOfRows - 1) {
+        gameOver = true;
+        const gameResult = {
+          isWin: isWinningWord(guess),
+          numberOfGuesses: activeRow
+        };
+        store.commit("stats/submitGameResult", gameResult);
+      }
     }
 
     function deleteLetter() {
       if (activeTile === 0) return;
       reactiveBoard.board[activeRow][activeTile-1] = "";
       activeTile -= 1;
-      console.log(tileDivs);
     }
 
     function inputLetter(key) {
@@ -100,13 +110,26 @@ export default defineComponent({
       }
     }
 
+    function loadSubmittedGuesses() {
+      for (let guess of [...store.state.game.submittedGuesses]) {
+        for (let letter of guess) {
+          inputLetter(letter);
+        }
+        submitGuess(true);
+      }
+    }
+
     return {
       wordLength,
       numberOfRows,
       tileDivs,
       reactiveBoard,
-      receiveKeypress
+      receiveKeypress,
+      loadSubmittedGuesses
     }
+  },
+  mounted() {
+    this.loadSubmittedGuesses(); // Load guesses the player has already made for today's word
   }
 });
 </script>

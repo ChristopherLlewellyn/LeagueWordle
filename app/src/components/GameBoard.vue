@@ -93,7 +93,9 @@ export default defineComponent({
           isWin: isWinningWord(guess),
           numberOfGuesses: activeRow
         };
-        store.commit("stats/submitGameResult", gameResult);
+        if (!fromLoad) {
+          store.commit("stats/submitGameResult", gameResult);
+        }
       }
     }
 

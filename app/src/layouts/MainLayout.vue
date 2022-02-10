@@ -2,6 +2,7 @@
   <q-layout class="layout">
     <div class="header">
       <h1>League Wordle</h1>
+      <stats />
     </div>
 
     <q-page-container>
@@ -12,9 +13,13 @@
 
 <script>
 import { defineComponent } from "vue";
+import Stats from "src/components/Stats.vue";
 
 export default defineComponent({
   name: "MainLayout",
+  components: {
+    Stats
+  }
 });
 </script>
 

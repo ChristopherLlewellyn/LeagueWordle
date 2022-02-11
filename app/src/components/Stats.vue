@@ -1,14 +1,17 @@
 <template>
-  <q-icon name="font_download" @click="show = true" class="q-ml-md" />
+  <q-icon name="leaderboard" size="sm" @click="show = true" class="q-ml-md" />
   <q-dialog v-model="show">
     <q-card class="card">
-      <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">Statistics</div>
+      <q-card-section class="row q-pb-none">
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
-      <q-card-section class="q-pt-1">
+      <q-card-section class="q-pb-none q-pt-none">
+        <div class="text-h6 center">STATISTICS</div>
+      </q-card-section>
+
+      <q-card-section class="q-pb-none q-pt-1">
         <table>
           <tr class="text-h4">
             <td>{{ store.state.stats.played }}</td>
@@ -25,10 +28,10 @@
         </table>
       </q-card-section>
 
-      <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">Guess Distribution</div>
+      <q-card-section class="q-pb-none q-pt-1">
+        <div class="text-h6 center">GUESS DISTRIBUTION</div>
       </q-card-section>
-      <q-card-section class="row items-center q-pb-1">
+      <q-card-section class="q-pb-1">
         <div class="graph-container">
           <div class="guess">1</div>
             <div class="graph">
@@ -78,12 +81,21 @@
           </div>
         </div>
       </q-card-section>
+
+      <q-card-section v-if="gameOver" class="q-pt-none">
+        <div class="text-h6 center">NEXT WORDLE</div>
+        <div class="center">
+          <vue-countdown :time="timeRemaining" v-slot="{ hours, minutes, seconds }" class="countdown">
+            {{ new Date(1000 * ((hours * 60 * 60) + (minutes * 60) + seconds)).toISOString().substr(11, 8) }}
+          </vue-countdown>
+        </div>
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useStore } from 'vuex'
 import useEmitter from 'src/composables/useEmitter.js';
 
@@ -92,11 +104,17 @@ export default defineComponent({
   setup () {
     const store = useStore();
     const show = ref(false);
+    const gameOver = ref(false);
     
     const emitter = useEmitter();
     emitter.on("gameOver", _ => {
       show.value = true;
+      gameOver.value = true;
     })
+
+    let actualTime = new Date(Date.now());
+    let endOfDay = new Date(actualTime.getFullYear(), actualTime.getMonth(), actualTime.getDate() + 1, 0, 0, 0);
+    let timeRemaining = endOfDay.getTime() - actualTime.getTime();
 
     function getDistributionPercentage(number) {
       const distribution = store.state.stats.guessDistribution[number];
@@ -108,7 +126,9 @@ export default defineComponent({
     return {
       show,
       store,
-      getDistributionPercentage
+      getDistributionPercentage,
+      timeRemaining,
+      gameOver
     }
   }
 });
@@ -127,6 +147,14 @@ td {
 
 .card {
   min-width: 320px;
+}
+
+.countdown {
+  font-size: 32px;
+}
+
+.center {
+  text-align: center;
 }
 
 .graph-container {

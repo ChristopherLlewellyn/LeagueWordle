@@ -1,7 +1,9 @@
 <template>
   <q-layout class="layout">
     <div class="header">
+      <q-space />
       <h1>League Wordle</h1>
+      <q-space />
       <stats />
     </div>
 
@@ -34,15 +36,19 @@ export default defineComponent({
 
 .header {
   height: 51px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
   border-bottom: solid 1px #3a3a3c;
 }
 
 .header h1 {
   font-size: 26px;
+  padding-left: 24px; // same size as the stats icon
 }
 </style>

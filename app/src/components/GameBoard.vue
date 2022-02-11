@@ -89,6 +89,8 @@ export default defineComponent({
       activeRow += 1;
       activeTile = 0;
 
+      emitter.emit("resultOfGuess", result);
+
       if (isWinningWord(guess) || activeRow > numberOfRows - 1) {
         gameOver = true;
         const gameResult = {
@@ -180,15 +182,15 @@ export default defineComponent({
   }
 
   .correct {
-      background-color: #538d4e;
-    }
+    background-color: #538d4e;
+  }
 
-    .present {
-      background-color: #b59f3b;
-    }
+  .present {
+    background-color: #b59f3b;
+  }
 
-    .absent {
-      background-color: #3a3a3c;
-    }
+  .absent {
+    background-color: #3a3a3c;
+  }
 }
 </style>

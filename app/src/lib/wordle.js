@@ -33,6 +33,7 @@ export function makeGuess(word) {
   let result = {
     isValidWord: isValidWord(word),
     letters: new Array(5),
+    word: word,
   };
 
   if (!result.isValidWord) {

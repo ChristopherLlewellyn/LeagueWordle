@@ -1,11 +1,11 @@
 <template>
   <q-layout class="layout">
-    <div class="header">
+    <q-header class="header">
       <q-space />
       <h1>League Wordle</h1>
       <q-space />
       <stats />
-    </div>
+    </q-header>
 
     <q-page-container>
       <router-view />
@@ -45,6 +45,7 @@ export default defineComponent({
   padding-left: 20px;
   padding-right: 20px;
   border-bottom: solid 1px $absent;
+  background-color: $dark;
 }
 
 .header h1 {

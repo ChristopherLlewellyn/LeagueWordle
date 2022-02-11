@@ -14,11 +14,13 @@
 import { defineComponent, reactive, ref } from "vue";
 import { useStore } from 'vuex'
 import { makeGuess, isWinningWord, getWordOfDay } from "src/lib/wordle.js";
+import useEmitter from 'src/composables/useEmitter.js'
 
 export default defineComponent({
   name: "GameBoard",
   setup () {
     const store = useStore();
+    const emitter = useEmitter();
     const wordLength = 5;
     const numberOfRows = 6;
     let activeRow = 0;
@@ -96,6 +98,7 @@ export default defineComponent({
         if (!fromLoad) {
           store.commit("stats/submitGameResult", gameResult);
         }
+        emitter.emit("gameOver");
       }
     }
 

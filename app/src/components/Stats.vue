@@ -85,11 +85,18 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { useStore } from 'vuex'
+import useEmitter from 'src/composables/useEmitter.js';
 
 export default defineComponent({
   name: "Stats",
   setup () {
     const store = useStore();
+    const show = ref(false);
+    
+    const emitter = useEmitter();
+    emitter.on("gameOver", _ => {
+      show.value = true;
+    })
 
     function getDistributionPercentage(number) {
       const distribution = store.state.stats.guessDistribution[number];
@@ -99,7 +106,7 @@ export default defineComponent({
     }
 
     return {
-      show: ref(false),
+      show,
       store,
       getDistributionPercentage
     }

@@ -38,8 +38,10 @@ export default defineComponent({
       tileDivs.value[i] = new Array(wordLength);
     }
 
-    console.log(getWordOfDay());
-
+    if (process.env.DEV) {
+      console.log(getWordOfDay());
+    }
+    
     const reactiveBoard = reactive({board: board})
 
     function receiveKeypress(key) {

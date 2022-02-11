@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <game-board ref="gameBoard" />
-    <keyboard @keypress="keypress" class="pin-to-bottom" />
+    <keyboard @keypress="keypress" />
   </q-page>
 </template>
 
@@ -33,11 +33,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style lang="scss">
-.pin-to-bottom {
-  position: absolute;
-  bottom: 0;
-  width: calc(100% - 16px);
-}
-</style>

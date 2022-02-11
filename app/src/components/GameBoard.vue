@@ -65,13 +65,13 @@ export default defineComponent({
 
       const result = makeGuess(guess);
 
-      if (!fromLoad) {
-        store.commit("game/submitGuess", guess);
-      }
-
       if (!result.isValidWord) {
         // show "is not valid word" popup
         return;
+      }
+
+      if (!fromLoad) {
+        store.commit("game/submitGuess", guess);
       }
 
       for (var i = 0; i < result.letters.length; i++) {

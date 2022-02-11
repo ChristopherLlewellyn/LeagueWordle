@@ -15,7 +15,7 @@
         <table>
           <tr class="text-h4">
             <td>{{ store.state.stats.played }}</td>
-            <td>{{ Math.round(store.state.stats.wins / store.state.stats.played * 100) }}</td>
+            <td>{{ store.state.stats.wins > 0 ? Math.round(store.state.stats.wins / store.state.stats.played * 100) : 0 }}</td>
             <td>{{ store.state.stats.currentStreak }}</td>
             <td>{{ store.state.stats.maxStreak }}</td>
           </tr>

@@ -114,16 +114,4 @@ button {
   text-transform: uppercase;
   -webkit-tap-highlight-color: rgba(0,0,0,0.3);
 }
-
-.correct {
-  background-color: #538d4e !important;
-}
-
-.present {
-  background-color: #b59f3b !important;
-}
-
-.absent {
-  background-color: #3a3a3c !important;
-}
 </style>

@@ -44,7 +44,7 @@ export default defineComponent({
   margin-right: auto;
   padding-left: 20px;
   padding-right: 20px;
-  border-bottom: solid 1px #3a3a3c;
+  border-bottom: solid 1px $absent;
 }
 
 .header h1 {

@@ -186,16 +186,12 @@ td {
 .graph-container .graph .graph-bar {
     height: 100%;
     position: relative;
-    background-color: #3a3a3c;
+    background-color: $absent;
     display: flex;
     justify-content: center;
 }
 
 .graph-container .graph .num-guesses {
     font-weight: bold;
-}
-
-.correct {
-  background-color: #538d4e !important;
 }
 </style>

@@ -179,19 +179,7 @@ export default defineComponent({
     vertical-align: middle;
     box-sizing: border-box;
     text-transform: uppercase;
-    border: 2px solid #3a3a3c;
-  }
-
-  .correct {
-    background-color: #538d4e;
-  }
-
-  .present {
-    background-color: #b59f3b;
-  }
-
-  .absent {
-    background-color: #3a3a3c;
+    border: 2px solid $absent;
   }
 }
 </style>

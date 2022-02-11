@@ -35,3 +35,7 @@ export function resetGuesses(state) {
 export function setGameOver(state) {
   state.gameOver = true;
 }
+
+export function setWon(state, value) {
+  state.won = value;
+}

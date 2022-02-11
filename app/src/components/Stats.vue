@@ -122,7 +122,7 @@ export default defineComponent({
     }
 
     function isTodaysScore(number) {
-      if (!store.state.game.gameOver) return false;
+      if (!store.state.game.gameOver || !store.state.game.won) return false;
       if (store.state.game.submittedGuesses.length === number) return true;
       return false;
     }

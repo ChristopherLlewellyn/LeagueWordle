@@ -15,12 +15,15 @@ import { defineComponent, reactive, ref } from "vue";
 import { useStore } from 'vuex'
 import { makeGuess, isWinningWord, getWordOfDay } from "src/lib/wordle.js";
 import useEmitter from 'src/composables/useEmitter.js'
+import { useQuasar } from 'quasar'
+import { delay } from "src/lib/helpers.js";
 
 export default defineComponent({
   name: "GameBoard",
   setup () {
     const store = useStore();
     const emitter = useEmitter();
+    const $q = useQuasar()
     const wordLength = 5;
     const numberOfRows = 6;
     let activeRow = 0;
@@ -56,7 +59,7 @@ export default defineComponent({
       inputLetter(key)
     }
 
-    function submitGuess(fromLoad = false) {
+    async function submitGuess(fromLoad = false) {
       if (gameOver) return;
 
       const guess = reactiveBoard.board[activeRow].join(""); // Get user's input
@@ -66,7 +69,7 @@ export default defineComponent({
       const result = makeGuess(guess);
 
       if (!result.isValidWord) {
-        // show "is not valid word" popup
+        notify("Not in word list");
         return;
       }
 
@@ -99,6 +102,14 @@ export default defineComponent({
         };
         if (!fromLoad) {
           store.commit("stats/submitGameResult", gameResult);
+          if (gameResult.isWin) {
+            store.commit("game/setWon", true);
+            notify("Nice!");
+            await delay(2500);
+          } else {
+            notify("Unlucky.");
+            await delay(2500);
+          }
         }
         store.commit("game/setGameOver");
         emitter.emit("gameOver");
@@ -125,6 +136,16 @@ export default defineComponent({
         }
         submitGuess(true);
       }
+    }
+
+    function notify(message) {
+      $q.notify({
+        message: message,
+        position: "center",
+        timeout: 1000,
+        color: "white",
+        textColor: "black"
+      });
     }
 
     return {

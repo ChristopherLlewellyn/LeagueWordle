@@ -3,5 +3,6 @@ export default function () {
     submittedGuesses: [],
     lastReset: new Date(),
     gameOver: false,
+    won: false,
   };
 }

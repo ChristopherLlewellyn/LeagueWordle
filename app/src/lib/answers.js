@@ -2,7 +2,6 @@ export const ANSWERS = [
   "draft",
   "blind",
   "penta",
-  "esport",
   "inhib",
   "skins",
   "build",

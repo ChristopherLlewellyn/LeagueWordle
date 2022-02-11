@@ -100,6 +100,7 @@ export default defineComponent({
         if (!fromLoad) {
           store.commit("stats/submitGameResult", gameResult);
         }
+        store.commit("game/setGameOver");
         emitter.emit("gameOver");
       }
     }

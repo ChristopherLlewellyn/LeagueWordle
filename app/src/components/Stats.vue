@@ -35,7 +35,7 @@
         <div class="graph-container">
           <div class="guess">1</div>
             <div class="graph">
-              <div class="graph-bar align-right" :style="{ width: getDistributionPercentage(1) + '%' }">
+              <div class="graph-bar align-right" :class="isTodaysScore(1) ? 'correct' : ''" :style="{ width: getDistributionPercentage(1) + '%' }">
                 <div class="num-guesses">{{ store.state.stats.guessDistribution[1] }}</div>
             </div>
           </div>
@@ -43,7 +43,7 @@
         <div class="graph-container">
           <div class="guess">2</div>
             <div class="graph">
-              <div class="graph-bar align-right" :style="{ width: getDistributionPercentage(2) + '%' }">
+              <div class="graph-bar align-right" :class="isTodaysScore(2) ? 'correct' : ''" :style="{ width: getDistributionPercentage(2) + '%' }">
                 <div class="num-guesses">{{ store.state.stats.guessDistribution[2] }}</div>
             </div>
           </div>
@@ -51,7 +51,7 @@
         <div class="graph-container">
           <div class="guess">3</div>
             <div class="graph">
-              <div class="graph-bar align-right" :style="{ width: getDistributionPercentage(3) + '%' }">
+              <div class="graph-bar align-right" :class="isTodaysScore(3) ? 'correct' : ''" :style="{ width: getDistributionPercentage(3) + '%' }">
                 <div class="num-guesses">{{ store.state.stats.guessDistribution[3] }}</div>
             </div>
           </div>
@@ -59,7 +59,7 @@
         <div class="graph-container">
           <div class="guess">4</div>
             <div class="graph">
-              <div class="graph-bar align-right" :style="{ width: getDistributionPercentage(4) + '%' }">
+              <div class="graph-bar align-right" :class="isTodaysScore(4) ? 'correct' : ''" :style="{ width: getDistributionPercentage(4) + '%' }">
                 <div class="num-guesses">{{ store.state.stats.guessDistribution[4] }}</div>
             </div>
           </div>
@@ -67,7 +67,7 @@
         <div class="graph-container">
           <div class="guess">5</div>
             <div class="graph">
-              <div class="graph-bar align-right" :style="{ width: getDistributionPercentage(5) + '%' }">
+              <div class="graph-bar align-right" :class="isTodaysScore(5) ? 'correct' : ''" :style="{ width: getDistributionPercentage(5) + '%' }">
                 <div class="num-guesses">{{ store.state.stats.guessDistribution[5] }}</div>
             </div>
           </div>
@@ -75,14 +75,14 @@
         <div class="graph-container">
           <div class="guess">6</div>
             <div class="graph">
-              <div class="graph-bar align-right" :style="{ width: getDistributionPercentage(6) + '%' }">
+              <div class="graph-bar align-right" :class="isTodaysScore(6) ? 'correct' : ''" :style="{ width: getDistributionPercentage(6) + '%' }">
                 <div class="num-guesses">{{ store.state.stats.guessDistribution[6] }}</div>
             </div>
           </div>
         </div>
       </q-card-section>
 
-      <q-card-section v-if="gameOver" class="q-pt-none">
+      <q-card-section v-if="store.state.game.gameOver" class="q-pt-none">
         <div class="text-h6 center">NEXT WORDLE</div>
         <div class="center">
           <vue-countdown :time="timeRemaining" v-slot="{ hours, minutes, seconds }" class="countdown">
@@ -104,12 +104,10 @@ export default defineComponent({
   setup () {
     const store = useStore();
     const show = ref(false);
-    const gameOver = ref(false);
     
     const emitter = useEmitter();
     emitter.on("gameOver", _ => {
       show.value = true;
-      gameOver.value = true;
     })
 
     let actualTime = new Date(Date.now());
@@ -123,12 +121,19 @@ export default defineComponent({
       return distribution / played * 100;
     }
 
+    function isTodaysScore(number) {
+      if (!store.state.game.gameOver) return false;
+      if (store.state.game.submittedGuesses.length === number) return true;
+      return false;
+    }
+
     return {
       show,
       store,
       getDistributionPercentage,
       timeRemaining,
-      gameOver
+      isTodaysScore
+
     }
   }
 });
@@ -188,5 +193,9 @@ td {
 
 .graph-container .graph .num-guesses {
     font-weight: bold;
+}
+
+.correct {
+  background-color: #538d4e !important;
 }
 </style>

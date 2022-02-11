@@ -31,3 +31,7 @@ export function resetGuesses(state) {
   );
   localStorage.setItem("lastReset", state.lastReset);
 }
+
+export function setGameOver(state) {
+  state.gameOver = true;
+}

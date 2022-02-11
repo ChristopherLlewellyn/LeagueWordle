@@ -2,13 +2,11 @@
   <q-icon name="leaderboard" size="sm" @click="show = true" class="q-ml-md" />
   <q-dialog v-model="show">
     <q-card class="card">
-      <q-card-section class="row q-pb-none">
+      <q-card-section class="row q-pb-none center">
+        <q-space />
+        <div class="text-h6" style="margin-left: 24px;">STATISTICS</div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
-      </q-card-section>
-
-      <q-card-section class="q-pb-none q-pt-none">
-        <div class="text-h6 center">STATISTICS</div>
       </q-card-section>
 
       <q-card-section class="q-pb-none q-pt-1">

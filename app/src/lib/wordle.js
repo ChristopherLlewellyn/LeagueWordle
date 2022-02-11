@@ -43,7 +43,14 @@ export function makeGuess(word) {
   for (var i = 0; i < word.length; i++) {
     if (solution[i].toLowerCase() === word[i].toLowerCase()) {
       result.letters[i] = "correct";
-    } else if (solution.toLowerCase().includes(word[i].toLowerCase())) {
+    } else if (
+      solution
+        .toLowerCase()
+        .includes(
+          word[i].toLowerCase() &&
+            !result.letters.includes(word[i].toLowerCase())
+        )
+    ) {
       result.letters[i] = "present";
     } else {
       result.letters[i] = "absent";

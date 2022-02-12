@@ -17,6 +17,7 @@ import { makeGuess, isWinningWord, getWordOfDay } from "src/lib/wordle.js";
 import useEmitter from 'src/composables/useEmitter.js'
 import { useQuasar } from 'quasar'
 import { delay } from "src/lib/helpers.js";
+import { notify } from "src/lib/notify.js";
 
 export default defineComponent({
   name: "GameBoard",
@@ -138,16 +139,6 @@ export default defineComponent({
         }
         submitGuess(true);
       }
-    }
-
-    function notify(message) {
-      $q.notify({
-        message: message,
-        position: "center",
-        timeout: 1000,
-        color: "white",
-        textColor: "black"
-      });
     }
 
     return {

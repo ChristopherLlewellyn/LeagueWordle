@@ -81,11 +81,20 @@
       </q-card-section>
 
       <q-card-section v-if="store.state.game.gameOver" class="q-pt-none">
-        <div class="text-h6 center">NEXT WORDLE</div>
-        <div class="center">
-          <vue-countdown :time="timeRemaining" v-slot="{ hours, minutes, seconds }" class="countdown">
-            {{ new Date(1000 * ((hours * 60 * 60) + (minutes * 60) + seconds)).toISOString().substr(11, 8) }}
-          </vue-countdown>
+        <div class="share-row">
+          <div class="share-column">
+            <div class="text-h6 center">NEXT WORDLE</div>
+            <div class="center">
+              <vue-countdown :time="timeRemaining" v-slot="{ hours, minutes, seconds }" class="countdown">
+                {{ new Date(1000 * ((hours * 60 * 60) + (minutes * 60) + seconds)).toISOString().substr(11, 8) }}
+              </vue-countdown>
+            </div>
+          </div>
+          <div class="share-column">
+            <div class="center">
+              <q-btn class="correct" style="font-size: 15px; width: 120px;" label="share" icon-right="share" @click="getShareText" />
+            </div>
+          </div>
         </div>
       </q-card-section>
     </q-card>
@@ -93,9 +102,11 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref } from "vue";
 import { useStore } from 'vuex'
 import useEmitter from 'src/composables/useEmitter.js';
+import { getCurrentGameNumber, makeGuess } from "src/lib/wordle.js";
+import { notify } from "src/lib/notify.js";
 
 export default defineComponent({
   name: "Stats",
@@ -125,19 +136,50 @@ export default defineComponent({
       return false;
     }
 
+    function getShareText() {
+      let shareText = `League Wordle ${getCurrentGameNumber()} ${store.state.game.submittedGuesses.length}/6\n`;
+      for (let guess of store.state.game.submittedGuesses) {
+        let emojis = "";
+        let result = makeGuess(guess);
+        for (let letterResult of result.letters) {
+          if (letterResult === "correct") {
+            emojis += "🟦"
+          }
+          else if (letterResult === "present") {
+            emojis += "🟨"
+          }
+          else {
+            emojis += "⬛";
+          }
+        }
+        shareText += `${emojis}\n`;
+      }
+
+      navigator.clipboard.writeText(shareText);
+      notify(`Copied results to clipboard`);
+    }
+
     return {
       show,
       store,
       getDistributionPercentage,
       timeRemaining,
-      isTodaysScore
-
+      isTodaysScore,
+      getShareText
     }
   }
 });
 </script>
 
 <style lang="scss" scoped>
+.share-row {
+  display: flex;
+}
+
+.share-column {
+  flex: 50%;
+}
+
 table {
   border-spacing: 20px 2px;
 }
@@ -161,35 +203,35 @@ td {
 }
 
 .graph-container {
-    width: 100%;
-    height: 23px;
-    display: flex;
-    align-items: center;
-    padding-bottom: 4px;
-    font-size: 14px;
-    line-height: 20px;
+  width: 100%;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 4px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .graph-container .graph {
-    width: 100%;
-    height: 100%;
-    padding-left: 4px;
+  width: 100%;
+  height: 100%;
+  padding-left: 4px;
 }
 
 .graph-container .graph .graph-bar.align-right {
-    justify-content: flex-end;
-    padding-right: 8px;
+  justify-content: flex-end;
+  padding-right: 8px;
 }
 
 .graph-container .graph .graph-bar {
-    height: 100%;
-    position: relative;
-    background-color: $absent;
-    display: flex;
-    justify-content: center;
+  height: 100%;
+  position: relative;
+  background-color: $absent;
+  display: flex;
+  justify-content: center;
 }
 
 .graph-container .graph .num-guesses {
-    font-weight: bold;
+  font-weight: bold;
 }
 </style>

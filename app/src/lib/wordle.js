@@ -1,6 +1,9 @@
 import { VALID_GUESSES } from "./validGuesses";
 import { ANSWERS } from "./answers";
 
+// February 8, 2022 Game Epoch
+const epochMs = new Date("February 8, 2022 00:00:00").valueOf();
+
 export function isValidWord(word) {
   return (
     VALID_GUESSES.includes(word.toLowerCase()) ||
@@ -9,8 +12,6 @@ export function isValidWord(word) {
 }
 
 export function getWordOfDay() {
-  // February 8, 2022 Game Epoch
-  const epochMs = new Date("February 8, 2022 00:00:00").valueOf();
   const now = Date.now();
   const msInDay = 86400000;
   const index = Math.floor((now - epochMs) / msInDay);
@@ -21,6 +22,12 @@ export function getWordOfDay() {
     solutionIndex: index,
     tomorrow: nextday,
   };
+}
+
+export function getCurrentGameNumber() {
+  const now = Date.now();
+  const daysElapsed = (now.valueOf() - epochMs) / (1000 * 60 * 60 * 24);
+  return Math.floor(daysElapsed) + 1;
 }
 
 export function isWinningWord(word) {

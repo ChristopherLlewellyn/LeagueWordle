@@ -50,5 +50,8 @@ export function submitGameResult(state, gameResult) {
   } else {
     state.losses += 1;
     localStorage.setItem("losses", state.losses);
+
+    state.currentStreak = 0;
+    localStorage.setItem("currentStreak", state.currentStreak);
   }
 }

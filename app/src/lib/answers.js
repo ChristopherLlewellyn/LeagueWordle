@@ -3,7 +3,6 @@ export const ANSWERS = [
   "blind",
   "penta",
   "inhib",
-  "skins",
   "build",
   "spell",
   "emote",

@@ -40,17 +40,24 @@ export function makeGuess(word) {
     return result;
   }
 
-  let presentLettersShownAlready = [];
+  let correctLetters = [];
+  let presentLetters = [];
   for (var i = 0; i < word.length; i++) {
     if (solution[i].toLowerCase() === word[i].toLowerCase()) {
       result.letters[i] = "correct";
-    } else if (
+      correctLetters.push(word[i].toLowerCase());
+    }
+  }
+
+  for (var i = 0; i < word.length; i++) {
+    if (
       solution.toLowerCase().includes(word[i].toLowerCase()) &&
-      !presentLettersShownAlready.includes(word[i].toLowerCase())
+      !presentLetters.includes(word[i].toLowerCase()) &&
+      !correctLetters.includes(word[i].toLowerCase())
     ) {
       result.letters[i] = "present";
-      presentLettersShownAlready.push(word[i].toLowerCase());
-    } else {
+      presentLetters.push(word[i].toLowerCase());
+    } else if (!solution.toLowerCase().includes(word[i].toLowerCase())) {
       result.letters[i] = "absent";
     }
   }

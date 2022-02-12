@@ -40,18 +40,16 @@ export function makeGuess(word) {
     return result;
   }
 
+  let presentLettersShownAlready = [];
   for (var i = 0; i < word.length; i++) {
     if (solution[i].toLowerCase() === word[i].toLowerCase()) {
       result.letters[i] = "correct";
     } else if (
-      solution
-        .toLowerCase()
-        .includes(
-          word[i].toLowerCase() &&
-            !result.letters.includes(word[i].toLowerCase())
-        )
+      solution.toLowerCase().includes(word[i].toLowerCase()) &&
+      !presentLettersShownAlready.includes(word[i].toLowerCase())
     ) {
       result.letters[i] = "present";
+      presentLettersShownAlready.push(word[i].toLowerCase());
     } else {
       result.letters[i] = "absent";
     }

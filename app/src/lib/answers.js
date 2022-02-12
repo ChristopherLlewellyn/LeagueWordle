@@ -1,4 +1,5 @@
 export const ANSWERS = [
+  "troll",
   "draft",
   "blind",
   "penta",

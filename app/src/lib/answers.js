@@ -82,4 +82,5 @@ export const ANSWERS = [
   "quinn",
   "viego",
   "yasuo",
+  "smurf",
 ];
